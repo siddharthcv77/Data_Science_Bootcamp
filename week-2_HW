@@ -1,0 +1,64 @@
+
+Ques 1)
+
+SELECT count(order_id)
+FROM sales
+WHERE 1=1
+AND date = "03-18-2023"
+
+Ques 2)
+
+select count(order_id)
+FROM sales s JOIN customer c
+ON 1=1
+AND s.customer_id = c.customer_id
+AND s.date = "03-18-2023"
+AND c.first_name = "JOHN"
+AND c.last_name = "DOE"
+
+Ques 3)
+
+SELECT customer_id,count(customer_id),avg(revenue)
+FROM sales
+WHERE 1=1
+AND date LIKE "01-%-2023"
+group by customer_id
+
+Ques 4)
+
+select i.department, sum(revenue) as total_revenue
+FROM sales s JOIN items i
+ON 1=1
+s.item_id = i.item_id
+group by department
+having total_revenue < 600
+
+Ques 5)
+
+select MAX(orders.tot_revenue) as highest_revenue, MIN(orders.tot_revenue) as lowest_revenue
+FROM
+(select order_id, sum(revenue) as tot_revenue
+		from sales
+		group by order_id) orders
+
+Ques 6)
+
+select order_id, sum(revenue) as tot_revenue
+FROM sales
+group by order_id,
+having tot_revenue = (select order_id, sum(revenue) as tot_revenue
+						from sales
+						group by order_id
+						order by tot_revenue desc
+						LIMIT 1)
+select order_id,item_id
+FROM sales s
+JOIN (select order_id, sum(revenue) as tot_revenue
+						from sales
+						group by order_id
+						order by tot_revenue desc
+						LIMIT 1) max_order
+ON 1=1
+s.order_id = max_order.order_id
+
+
