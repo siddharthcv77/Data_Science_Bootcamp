@@ -43,14 +43,6 @@ FROM
 
 Ques 6)
 
-select order_id, sum(revenue) as tot_revenue
-FROM sales
-group by order_id,
-having tot_revenue = (select order_id, sum(revenue) as tot_revenue
-						from sales
-						group by order_id
-						order by tot_revenue desc
-						LIMIT 1)
 select order_id,item_id
 FROM sales s
 JOIN (select order_id, sum(revenue) as tot_revenue
@@ -59,6 +51,6 @@ JOIN (select order_id, sum(revenue) as tot_revenue
 						order by tot_revenue desc
 						LIMIT 1) max_order
 ON 1=1
-s.order_id = max_order.order_id
+AND s.order_id = max_order.order_id
 
 
